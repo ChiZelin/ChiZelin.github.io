@@ -398,40 +398,21 @@
 
       
         
-          
-            <h1 id="在Dell-Precision5530上安装Arch"><a href="#在Dell-Precision5530上安装Arch" class="headerlink" title="在Dell Precision5530上安装Arch"></a>在Dell Precision5530上安装Arch</h1><h4 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h4><p><a href="http://blog.51cto.com/shenfly231/1918426" target="_blank" rel="noopener">http://blog.51cto.com/shenfly231/1918426</a><br><a href="https://www.linuxidc.com/Linux/2016-05/131059.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2016-05/131059.htm</a><br><a href="https://webby.land/2017/02/10/arch-linux-uefi-install-on-nvme-drives" target="_blank" rel="noopener">https://webby.land/2017/02/10/arch-linux-uefi-install-on-nvme-drives</a></p>
+          <h4 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h4><p><a href="http://blog.51cto.com/shenfly231/1918426" target="_blank" rel="noopener">http://blog.51cto.com/shenfly231/1918426</a><br><a href="https://www.linuxidc.com/Linux/2016-05/131059.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2016-05/131059.htm</a><br><a href="https://webby.land/2017/02/10/arch-linux-uefi-install-on-nvme-drives" target="_blank" rel="noopener">https://webby.land/2017/02/10/arch-linux-uefi-install-on-nvme-drives</a></p>
 <h4 id="综合以上3个教程，我安装成功的步骤如下："><a href="#综合以上3个教程，我安装成功的步骤如下：" class="headerlink" title="综合以上3个教程，我安装成功的步骤如下："></a>综合以上3个教程，我安装成功的步骤如下：</h4><h4 id="1-parted分区"><a href="#1-parted分区" class="headerlink" title="1.parted分区"></a>1.parted分区</h4><p>查看分区信息：<br><code>lsblk</code></p>
 <p>parted对nvme0n1分区:<br><code>parted /dev/nvme0n1</code></p>
 <p>  查看：<br>  <code>(parted)print</code> //先print看一下分区情况  </p>
 <p>  清理：<br>  <code>(parted)rm 1</code> //如果有原来分区，先这样删除<br>  <code>(parted)rm 2</code><br>  <code>……</code>  </p>
 <p>  创建：<br>  <code>(parted)mklabel gpt</code><br>  <code>(parted)mkpart ESP fat32 1MB 513MiB</code>  //创建boot分区<br>  <code>(parted)set 1 boot on</code>  //设置1分区为启动<br>  <code>(parted)mkpart primary ext4 513MiB 201GiB</code> //第2个分区给root<br>  <code>(parted)mkpart primary ext4 201GiB 943GiB</code> //第3个分区给home<br>  <code>(parted)mkpart primary ext4 943GiB 100%</code> //剩下的给交换分区  </p>
 <p>  退出parted：<br>  <code>(parted)q</code></p>
-<h4 id="2-mkfs格式化"><a href="#2-mkfs格式化" class="headerlink" title="2.mkfs格式化"></a>2.mkfs格式化</h4><p><code>mkfs.fat -F32 /dev/nvme0n1p1</code><br><code>mkfs.ext4 /dev/nvme0n1p2</code><br><code>mkfs.ext4 /dev/nvme0n1p3</code><br><code>mkswap /dev/nvme0n1p4</code> //将第4个分区格式化为swap分区<br><code>swapon /dev/nvme0n1p4</code> //启动swap分区</p>
-<h4 id="3-mount分区"><a href="#3-mount分区" class="headerlink" title="3.mount分区"></a>3.mount分区</h4><p><code>mount /dev/nvme0n1p2 /mnt</code><br><code>mkdir /mnt/boot</code><br><code>mount /dev/nvme0n1p1 /mnt/boot</code><br><code>mkdir /mnt/home</code><br><code>mount /dev/nvme0n1p3 /mnt/home</code>  </p>
-<h4 id="4-连网"><a href="#4-连网" class="headerlink" title="4.连网"></a>4.连网</h4><p><code>wifi-menu</code> //注意wifi密码别打错了</p>
-<h4 id="5-修改更新源"><a href="#5-修改更新源" class="headerlink" title="5.修改更新源"></a>5.修改更新源</h4><p>在<code>/etc/pacman.d/mirrorlist</code>最上面添加清华的源<br><code>Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch</code></p>
-<h4 id="6-pacstrap安装基础包"><a href="#6-pacstrap安装基础包" class="headerlink" title="6.pacstrap安装基础包"></a>6.pacstrap安装基础包</h4><p><code>pacstrap -i /mnt base base-devel</code></p>
-<h4 id="7-genfstab生成-fstab-文件："><a href="#7-genfstab生成-fstab-文件：" class="headerlink" title="7.genfstab生成 fstab 文件："></a>7.genfstab生成 fstab 文件：</h4><p><code>genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</code></p>
-<h4 id="8-chroot切换到新硬盘目录"><a href="#8-chroot切换到新硬盘目录" class="headerlink" title="8.chroot切换到新硬盘目录"></a>8.chroot切换到新硬盘目录</h4><p><code>arch-chroot /mnt /bin/bash</code></p>
-<h4 id="9-设置时区、字符"><a href="#9-设置时区、字符" class="headerlink" title="9.设置时区、字符"></a>9.设置时区、字符</h4><p><code>ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</code>   //时区</p>
-<p>从 <code>/etc/locale.gen</code> 选取需要的区域，去掉开头的注释即可(可去掉如下几个)：<br>    <code>en_US.UTF-8 UTF-8</code><br>    <code>zh_CN.GBK GBK</code><br>    <code>zh_CN.UTF-8 UTF-8</code><br>    <code>zh_CN GB2312</code>  </p>
-<p>然后执行命令：<br><code>locale-gen</code></p>
-<p>同时，创建 <code>/etc/locale.conf</code> 文件，写入以下内容：<br><code>LANG=en_US.UTF-8</code></p>
-<h4 id="10-设置主机名"><a href="#10-设置主机名" class="headerlink" title="10.设置主机名"></a>10.设置主机名</h4><p><code>echo 名字 &gt; /etc/hostname</code>   //主机名。</p>
-<h4 id="特别提醒！！！这个名字竟然能影响reboot速度，我之前用ArchLinux作为名字，reboot大概1分钟左右，后来觉得名字难看，改为arch-发现reboot只需几秒。又改回去测试一下，它确实影响了reboot速度。"><a href="#特别提醒！！！这个名字竟然能影响reboot速度，我之前用ArchLinux作为名字，reboot大概1分钟左右，后来觉得名字难看，改为arch-发现reboot只需几秒。又改回去测试一下，它确实影响了reboot速度。" class="headerlink" title="特别提醒！！！这个名字竟然能影响reboot速度，我之前用ArchLinux作为名字，reboot大概1分钟左右，后来觉得名字难看，改为arch, 发现reboot只需几秒。又改回去测试一下，它确实影响了reboot速度。"></a>特别提醒！！！这个名字竟然能影响reboot速度，我之前用ArchLinux作为名字，reboot大概1分钟左右，后来觉得名字难看，改为arch, 发现reboot只需几秒。又改回去测试一下，它确实影响了reboot速度。</h4><h4 id="11-可加载nvme模块"><a href="#11-可加载nvme模块" class="headerlink" title="11.可加载nvme模块"></a>11.可加载nvme模块</h4><p>打开<code>/etc/mkinitcpio.conf</code><br>在<code>MODULES</code>后面的括号里加入<code>ext4</code><br>在<code>HOOKS</code>后面的括号里<code>udev</code>后面加入<code>lvm2</code>，<code>lvm2</code>后面加入<code>resume</code>  </p>
-<h4 id="12-更新mkinitcpio"><a href="#12-更新mkinitcpio" class="headerlink" title="12.更新mkinitcpio"></a>12.更新mkinitcpio</h4><p><code>mkinitcpio -p linux</code></p>
-<h4 id="13-更改root密码"><a href="#13-更改root密码" class="headerlink" title="13.更改root密码"></a>13.更改root密码</h4><p><code>passwd root</code></p>
-<h4 id="14-安装引导程序"><a href="#14-安装引导程序" class="headerlink" title="14.安装引导程序"></a>14.安装引导程序</h4><p>这里选择使用 <code>systemd-boot</code> 来完成 <code>UEFI</code> 引导，执行如下命令：</p>
-<p><code>bootctl install</code></p>
-<p>安装intel-ucode:</p>
-<p><code>pacman -S intel-ucode</code></p>
-<p>创建引导配置文件<code>/boot/loader/entries/arch.conf</code>, 写入如下内容：</p>
-<p>  <code>title   Arch Linux</code><br>  <code>linux   /vmlinuz-linux</code><br>  <code>initrd /intel-ucode.img</code><br>  <code>initrd  /initramfs-linux.img</code><br>  <code>options root=/dev/nvme0n1p2 rw</code>   //nvme0n1p2 指你root的目录分区</p>
-<p>创建<code>/boot/loader/loader.conf</code>, 写入如下内容：</p>
-<p>  <code>timeout 3</code><br>  <code>default arch</code></p>
-<h4 id="15-退出，重启"><a href="#15-退出，重启" class="headerlink" title="15.退出，重启"></a>15.退出，重启</h4><p><code>exit</code><br><code>umount -R /mnt</code><br><code>reboot</code>  </p>
-<h3 id="Good-luck-to-you"><a href="#Good-luck-to-you" class="headerlink" title="Good luck to you!!!"></a>Good luck to you!!!</h3>
-          
+<h4 id="2-mkfs格式化"><a href="#2-mkfs格式化" class="headerlink" title="2.mkfs格式化"></a>2.mkfs格式化</h4>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/18/在Dell-Precision5530上安装Arch/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
