@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.6" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.6">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.6">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.6">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.6" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.6',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="注意本文说的堆是数据结构中的堆，而不是java内存模型中的堆。 一、定义n个元素的序列{k1, k2, …, kn}当且仅当满足以下关系时，称之为堆。若堆顶元素最小，则称之为小顶堆或小根堆。若堆顶元素最大，则称之为大顶堆或大根堆。如下图所示。 )  二、性质若以一维数组作为堆的存储结构，并将该一维数组看成是一个完全二叉树，则完全二叉树中所有非终端结点的值均不大于（或不小于）其左、右孩子结点的值。">
+<meta name="keywords" content="Data Structure">
+<meta property="og:type" content="article">
+<meta property="og:title" content="堆（Heap）">
+<meta property="og:url" content="http://yoursite.com/2019/08/26/heap/index.html">
+<meta property="og:site_name" content="A ray of sunshine">
+<meta property="og:description" content="注意本文说的堆是数据结构中的堆，而不是java内存模型中的堆。 一、定义n个元素的序列{k1, k2, …, kn}当且仅当满足以下关系时，称之为堆。若堆顶元素最小，则称之为小顶堆或小根堆。若堆顶元素最大，则称之为大顶堆或大根堆。如下图所示。 )  二、性质若以一维数组作为堆的存储结构，并将该一维数组看成是一个完全二叉树，则完全二叉树中所有非终端结点的值均不大于（或不小于）其左、右孩子结点的值。">
+<meta property="og:image" content="https://juejin.im/equation?tex=%5Cbegin%7Bcases%7D%0A%5Ctext%7B%24k_i%24%20%24%5Cleq%24%20%24k_%7B2i%7D%24%7D%5C%5C%5B1ex%5D%0A%5Ctext%7B%24k_i%24%20%24%5Cleq%24%20%24k2_%7Bi%2B1%7D%24%7D%0A%5Cend%7Bcases%7D%0A~~~~~%20%E6%88%96%20~~~~~%0A%5Cbegin%7Bcases%7D%0A%5Ctext%7B%24k_i%24%20%24%5Cgeq%24%20%24k_%7B2i%7D%24%7D%5C%5C%5B1ex%5D%0A%5Ctext%7B%24k_i%24%20%24%5Cgeq%24%20%24k2_%7Bi%2B1%7D%24%7D%0A%5Cend%7Bcases%7D%20%0A~~~~~%0A%5Cleft(i%20%3D%201%2C%202%2C%20...%2C%20%5Clfloor%20%5Cfrac%7Bn%7D%7B2%7D%20%5Crfloor%5Cright">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2019/8/25/16cc9180043bdfca?w=949&h=413&f=png&s=273033">
+<meta property="og:image" content="https://juejin.im/equation?tex=%5Clfloor%20%5Cfrac%7Bn%7D%7B2%7D%20%5Crfloor">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2019/8/25/16cc94b206274d64?w=1103&h=511&f=png&s=288618">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2019/8/25/16cc944c5ea9698f?w=1055&h=469&f=png&s=261077">
+<meta property="og:updated_time" content="2019-08-26T12:36:22.608Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="堆（Heap）">
+<meta name="twitter:description" content="注意本文说的堆是数据结构中的堆，而不是java内存模型中的堆。 一、定义n个元素的序列{k1, k2, …, kn}当且仅当满足以下关系时，称之为堆。若堆顶元素最小，则称之为小顶堆或小根堆。若堆顶元素最大，则称之为大顶堆或大根堆。如下图所示。 )  二、性质若以一维数组作为堆的存储结构，并将该一维数组看成是一个完全二叉树，则完全二叉树中所有非终端结点的值均不大于（或不小于）其左、右孩子结点的值。">
+<meta name="twitter:image" content="https://juejin.im/equation?tex=%5Cbegin%7Bcases%7D%0A%5Ctext%7B%24k_i%24%20%24%5Cleq%24%20%24k_%7B2i%7D%24%7D%5C%5C%5B1ex%5D%0A%5Ctext%7B%24k_i%24%20%24%5Cleq%24%20%24k2_%7Bi%2B1%7D%24%7D%0A%5Cend%7Bcases%7D%0A~~~~~%20%E6%88%96%20~~~~~%0A%5Cbegin%7Bcases%7D%0A%5Ctext%7B%24k_i%24%20%24%5Cgeq%24%20%24k_%7B2i%7D%24%7D%5C%5C%5B1ex%5D%0A%5Ctext%7B%24k_i%24%20%24%5Cgeq%24%20%24k2_%7Bi%2B1%7D%24%7D%0A%5Cend%7Bcases%7D%20%0A~~~~~%0A%5Cleft(i%20%3D%201%2C%202%2C%20...%2C%20%5Clfloor%20%5Cfrac%7Bn%7D%7B2%7D%20%5Crfloor%5Cright">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/08/26/heap/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>堆（Heap） | A ray of sunshine</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> 
+
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">A ray of sunshine</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+          
+  <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+</li>
+
+      
+        
+        
+          
+  <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+</li>
+
+      
+        
+        
+          
+  <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+</li>
+
+      
+        
+        
+          
+  <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+</li>
+
+      
+
+      
+    </ul>
+  
+
+  
+    
+
+    
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+    
+
+  
+
+
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/26/heap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leon Chi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars2.githubusercontent.com/u/26017377?s=460&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="A ray of sunshine">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">堆（Heap）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-26T20:20:43+08:00">2019-08-26</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>注意本文说的堆是数据结构中的堆，而不是java内存模型中的堆。</p>
+<h2 id="一、定义"><a href="#一、定义" class="headerlink" title="一、定义"></a>一、定义</h2><p>n个元素的<strong>序列</strong>{k<sub>1</sub>, k<sub>2</sub>, …, k<sub>n</sub>}当且仅当满足以下关系时，称之为<strong>堆</strong>。若堆顶元素最小，则称之为小顶堆或小根堆。若堆顶元素最大，则称之为大顶堆或大根堆。如下图所示。</p>
+<p><img src="https://juejin.im/equation?tex=%5Cbegin%7Bcases%7D%0A%5Ctext%7B%24k_i%24%20%24%5Cleq%24%20%24k_%7B2i%7D%24%7D%5C%5C%5B1ex%5D%0A%5Ctext%7B%24k_i%24%20%24%5Cleq%24%20%24k2_%7Bi%2B1%7D%24%7D%0A%5Cend%7Bcases%7D%0A~~~~~%20%E6%88%96%20~~~~~%0A%5Cbegin%7Bcases%7D%0A%5Ctext%7B%24k_i%24%20%24%5Cgeq%24%20%24k_%7B2i%7D%24%7D%5C%5C%5B1ex%5D%0A%5Ctext%7B%24k_i%24%20%24%5Cgeq%24%20%24k2_%7Bi%2B1%7D%24%7D%0A%5Cend%7Bcases%7D%20%0A~~~~~%0A%5Cleft(i%20%3D%201%2C%202%2C%20...%2C%20%5Clfloor%20%5Cfrac%7Bn%7D%7B2%7D%20%5Crfloor%5Cright" alt="">)</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/8/25/16cc9180043bdfca?w=949&amp;h=413&amp;f=png&amp;s=273033" alt=""></p>
+<h2 id="二、性质"><a href="#二、性质" class="headerlink" title="二、性质"></a>二、性质</h2><p>若以<strong>一维数组</strong>作为堆的<strong>存储结构</strong>，并将该一维数组看成是一个<strong>完全二叉树</strong>，则完全二叉树中所有非终端结点的值均不大于（或不小于）其左、右孩子结点的值。</p>
+<p>堆顶元素（或完全二叉树的根）是堆中最小值（或最大值）。</p>
+<p>最后一个非终端结点是第<img src="https://juejin.im/equation?tex=%5Clfloor%20%5Cfrac%7Bn%7D%7B2%7D%20%5Crfloor" alt="">个元素。</p>
+<h2 id="三、操作"><a href="#三、操作" class="headerlink" title="三、操作"></a>三、操作</h2><ul>
+<li><strong>向上移动</strong></li>
+</ul>
+<a id="more"></a>
+<p><img src="https://user-gold-cdn.xitu.io/2019/8/25/16cc94b206274d64?w=1103&amp;h=511&amp;f=png&amp;s=288618" alt=""></p>
+<p>向上移动又有人称其为上浮，是将一个元素与其父结点比较大小，不符合堆的条件就交换位置，交换后继续与新的父结点比较，如此循环，直到符合堆的条件为止。如上图所示，如果是小根堆，而该元素却小于父结点，那么就需要将其向上移动，移动后再与新的父结点比较，以此类推，直到找到某个位置，它不再小于父结点，则该满足堆的条件，移动结束。</p>
+<p><strong>参考代码：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">shiftUp</span><span class="params">(<span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(parent(k) &gt;= <span class="number">0</span> &amp;&amp; _heap[k] &lt; _heap[parent(k)]) &#123;</span><br><span class="line">		swap(k, parent(k));</span><br><span class="line">		k = parent(k);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><strong>向下移动</strong></li>
+</ul>
+<p><img src="https://user-gold-cdn.xitu.io/2019/8/25/16cc944c5ea9698f?w=1055&amp;h=469&amp;f=png&amp;s=261077" alt=""></p>
+<p>向下移动又有人称其为下沉，是将一个元素与其孩子结点进行比较与调整。如上图所示，如果是小根堆，用该结点与其左右孩子中较小的一个结点比较，如果大于那个孩子，则与其交换，交换后继续与新的孩子结点比较，以此类堆，直到找到其合适位置为止。</p>
+<p><strong>参考代码：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">shiftDown</span><span class="params">(<span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(left(k) &lt; _heapSize) &#123;</span><br><span class="line">		<span class="keyword">int</span> j = left(k);</span><br><span class="line">		<span class="keyword">if</span>(right(k) &lt; _heapSize &amp;&amp; _heap[right(k)] &lt; _heap[left(k)]) j++;</span><br><span class="line">		<span class="keyword">if</span>(_heap[k] &lt; _heap[j]) <span class="keyword">break</span>;</span><br><span class="line">		swap(k,j);</span><br><span class="line">		k = j;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><strong>插入</strong></li>
+</ul>
+<p>插入也就是向堆中加入新成员的操作。那么新成员放在哪里呢？放在最后。那放在最后是不是可能破坏堆的结构啊？没错。怎么办？将其向上移动。</p>
+<p><strong>参考代码：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">int</span> v)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(_heapSize &gt;= _maxSize) <span class="keyword">return</span>; <span class="comment">//如超出容量，这里只简单地返回，实际中请根据需求进行处理</span></span><br><span class="line">	_heap[_heapSize] = v;</span><br><span class="line">	shiftUp(_heapSize);</span><br><span class="line">	_heapSize++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><strong>删除</strong></li>
+</ul>
+<p>删除也就是堆顶元素被拿走了。群龙无首这下怎么办？别急我们要选出新的堆顶。下面我来告诉你怎么办，首先把堆中最后一个元素搬到堆顶，然后将其向下移动。对，就这么简单。</p>
+<p><strong>参考代码：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">delMin</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(_heapSize == <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The heap is already empty!"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> max = _heap[<span class="number">0</span>];</span><br><span class="line">	_heapSize--;</span><br><span class="line">	swap(<span class="number">0</span>, _heapSize);</span><br><span class="line">	shiftDown(<span class="number">0</span>);</span><br><span class="line">	<span class="keyword">return</span> max;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><strong>创建</strong></li>
+</ul>
+<p>个人理解堆的创建其实就是将一个序例通过某些操作，使其满足堆的条件从而转化为堆的过程。也就是你给我一个序列，我还你一个堆！</p>
+<p>那么如何去搞呢？ 有两种方式：  </p>
+<p>1）逐个插入。插入操作会自觉保证插入后该序列仍然是堆。</p>
+<p><strong>参考代码</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">MinHeap</span><span class="params">(<span class="keyword">int</span>[] initialNums, <span class="keyword">int</span> maxSize)</span> </span>&#123;</span><br><span class="line">	_maxSize = maxSize;</span><br><span class="line">	_heap = <span class="keyword">new</span> <span class="keyword">int</span>[maxSize];</span><br><span class="line"></span><br><span class="line">	<span class="comment">//请看关键代码，逐个插入</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; initialNums.length; i++) &#123;</span><br><span class="line">		insert(initialNums[i]);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2）逐个调整。从最后一个非终端结点开始，向前，逐个调整以各个非终端结点为根的子树，使每棵子树都变成堆，等最后一个非终端结点调整完毕，整个序列就变成了堆。</p>
+<p><strong>参考代码</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">MinHeap</span><span class="params">(<span class="keyword">int</span>[] initialNums, <span class="keyword">int</span> maxSize)</span> </span>&#123;</span><br><span class="line">	_maxSize = maxSize;</span><br><span class="line">	_heap = Arrays.copyOf(initialNums, initialNums.length);</span><br><span class="line">	_heapSize = initialNums.length;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//从最后一个非终端结点开始逐棵子树调整</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = ((_heapSize - <span class="number">1</span>) / <span class="number">2</span>); i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">		shiftDown(i);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="四、完整代码"><a href="#四、完整代码" class="headerlink" title="四、完整代码"></a>四、完整代码</h2><p>该代码简单实现了小顶堆的创建、插入、删除等操作。希望能够辅助读者理解。为简单起见，这里只接收int类型数据。</p>
+<details><br><summary>点击查看完整代码</summary><br><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> just.doit;</span><br><span class="line"><span class="keyword">import</span> java.lang.Exception;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MinHeap</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span>  <span class="keyword">int</span> _heapSize = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">private</span>  <span class="keyword">int</span> _maxSize;</span><br><span class="line">	<span class="keyword">private</span>  <span class="keyword">int</span>[] _heap = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//	public MinHeap(int[] initialNums, int maxSize) &#123;</span></span><br><span class="line"><span class="comment">//		_maxSize = maxSize;</span></span><br><span class="line"><span class="comment">//		_heap = Arrays.copyOf(initialNums, initialNums.length);</span></span><br><span class="line"><span class="comment">//		_heapSize = initialNums.length;</span></span><br><span class="line"><span class="comment">//		</span></span><br><span class="line"><span class="comment">//		//从最后一个非终端结点开始逐棵子树调整</span></span><br><span class="line"><span class="comment">//		for(int i = ((_heapSize - 1) / 2); i &gt;= 0; i--) &#123;</span></span><br><span class="line"><span class="comment">//			shiftDown(i);</span></span><br><span class="line"><span class="comment">//		&#125;</span></span><br><span class="line"><span class="comment">//	&#125;</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">MinHeap</span><span class="params">(<span class="keyword">int</span>[] initialNums, <span class="keyword">int</span> maxSize)</span> </span>&#123;</span><br><span class="line">		_maxSize = maxSize;</span><br><span class="line">		_heap = <span class="keyword">new</span> <span class="keyword">int</span>[maxSize];</span><br><span class="line"></span><br><span class="line">		<span class="comment">//逐个插入</span></span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; initialNums.length; i++) &#123;</span><br><span class="line">			insert(initialNums[i]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">int</span> v)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(_heapSize &gt;= _maxSize) <span class="keyword">return</span>; <span class="comment">//如超出容量，这里只简单地返回，实际中请根据需求进行处理</span></span><br><span class="line">		_heap[_heapSize] = v;</span><br><span class="line">		shiftUp(_heapSize);</span><br><span class="line">		_heapSize++;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">delMin</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(_heapSize == <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The heap is already empty!"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">int</span> max = _heap[<span class="number">0</span>];</span><br><span class="line">		_heapSize--;</span><br><span class="line">		swap(<span class="number">0</span>, _heapSize);</span><br><span class="line">		shiftDown(<span class="number">0</span>);</span><br><span class="line">		<span class="keyword">return</span> max;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printMinHeap</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; _heapSize; i++) &#123;</span><br><span class="line">			System.out.print(_heap[i]+<span class="string">" "</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">shiftUp</span><span class="params">(<span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">while</span>(parent(k) &gt;= <span class="number">0</span> &amp;&amp; _heap[k] &lt; _heap[parent(k)]) &#123;</span><br><span class="line">			swap(k, parent(k));</span><br><span class="line">			k = parent(k);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">shiftDown</span><span class="params">(<span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">while</span>(left(k) &lt; _heapSize) &#123;</span><br><span class="line">			<span class="keyword">int</span> j = left(k);</span><br><span class="line">			<span class="keyword">if</span>(right(k) &lt; _heapSize &amp;&amp; _heap[right(k)] &lt; _heap[left(k)]) j++;</span><br><span class="line">			<span class="keyword">if</span>(_heap[k] &lt; _heap[j]) <span class="keyword">break</span>;</span><br><span class="line">			swap(k,j);</span><br><span class="line">			k = j;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> temp = _heap[i];</span><br><span class="line">		_heap[i] = _heap[j];</span><br><span class="line">		_heap[j] = temp;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//本代码从0开始存储，所以left为2 * k + 1，若从1开始存储则left为2 * k</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">left</span><span class="params">(<span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">2</span> * k + <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//本代码从0开始存储，所以right为2 * k + 2，若从1开始存储则right为2 * k + 1</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">right</span><span class="params">(<span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">2</span> * k + <span class="number">2</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//本代码从0开始存储，所以parent为(k - 1) / 2，若从1开始存储则parent为k / 2</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">parent</span><span class="params">(<span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> (k - <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="keyword">int</span>[] a = &#123;<span class="number">10</span>,<span class="number">33</span>,<span class="number">1</span>,<span class="number">4</span>,<span class="number">3</span>,<span class="number">29</span>,<span class="number">5</span>,<span class="number">8</span>&#125;;</span><br><span class="line"></span><br><span class="line">		MinHeap maxHeap = <span class="keyword">new</span> MinHeap(a, <span class="number">20</span>); <span class="comment">//使用逐个插入的方式构建堆</span></span><br><span class="line"></span><br><span class="line">		maxHeap.printMinHeap(); <span class="comment">// 1 3 5 8 4 29 10 33</span></span><br><span class="line"></span><br><span class="line">		System.out.println(maxHeap.delMin()); <span class="comment">// 取出堆顶元素 1</span></span><br><span class="line"></span><br><span class="line">		maxHeap.printMinHeap(); <span class="comment">//取出堆顶元素后的新堆 3 4 5 8 33 29 10</span></span><br><span class="line"></span><br><span class="line">		maxHeap.insert(<span class="number">6</span>); <span class="comment">// 插入 6</span></span><br><span class="line"></span><br><span class="line">		maxHeap.printMinHeap(); <span class="comment">// 插入后的新堆 3 4 5 6 33 29 10 8</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><br></details>
+
+<h2 id="五、使用场景"><a href="#五、使用场景" class="headerlink" title="五、使用场景"></a>五、使用场景</h2><p>堆的使用场景包括但不限于一下三种。</p>
+<ul>
+<li><strong>堆排序</strong></li>
+</ul>
+<p>有了上面的基础，堆排序的思路很简单，给一个序列，先将其构建成堆，堆顶元素肯定是最大（或最小值），将堆顶元素放到序列末尾，并把末尾元素补充到堆顶，并对其进行向下调整，调整到n-1位置为止，这样前n-1个元素又是一个堆，又可以取到第二大（或第二小）的值，以此类推，直到堆只剩下一个元素，将得到一个有序序列。</p>
+<p>如下代码是通过构建小根堆，将int数组从大到小排序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">heapSort</span><span class="params">(<span class="keyword">int</span>[] initialNums)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span>[] heap = buildMinHeap(initialNums);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = heap.length - <span class="number">1</span>; i &gt; <span class="number">0</span>; i--) &#123;</span><br><span class="line">		swap(heap, <span class="number">0</span>, i);</span><br><span class="line">		shiftDown(heap, <span class="number">0</span>, i);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<details><br><summary>点击查看完整代码</summary><br><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">package</span> just.doit;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Sort</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">heapSort</span><span class="params">(<span class="keyword">int</span>[] initialNums)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span>[] heap = buildMinHeap(initialNums);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = heap.length - <span class="number">1</span>; i &gt; <span class="number">0</span>; i--) &#123;</span><br><span class="line">			swap(heap, <span class="number">0</span>, i);</span><br><span class="line">			shiftDown(heap, <span class="number">0</span>, i);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] buildMinHeap(<span class="keyword">int</span>[] initialNums) &#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = ((initialNums.length - <span class="number">1</span>) / <span class="number">2</span>); i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">			shiftDown(initialNums, i, initialNums.length);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> initialNums;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">shiftDown</span><span class="params">(<span class="keyword">int</span>[] heap, <span class="keyword">int</span> k, <span class="keyword">int</span> heapSize)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">while</span>(left(k) &lt; heapSize) &#123;</span><br><span class="line">			<span class="keyword">int</span> j = left(k);</span><br><span class="line">			<span class="keyword">if</span>(right(k) &lt; heapSize &amp;&amp; heap[right(k)] &lt; heap[left(k)]) j++;</span><br><span class="line">			<span class="keyword">if</span>(heap[k] &lt; heap[j]) <span class="keyword">break</span>;</span><br><span class="line">			swap(heap,k,j);</span><br><span class="line">			k = j;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] heap, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> temp = heap[i];</span><br><span class="line">		heap[i] = heap[j];</span><br><span class="line">		heap[j] = temp;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">left</span><span class="params">(<span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">2</span> * k + <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">right</span><span class="params">(<span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">2</span> * k + <span class="number">2</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span>[] a = &#123;<span class="number">5</span>,<span class="number">23</span>,<span class="number">7</span>,<span class="number">33</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">16</span>,<span class="number">9</span>&#125;;</span><br><span class="line">		System.out.println(<span class="string">"排序前："</span> + Arrays.toString(a));</span><br><span class="line">		Sort.heapSort(a);</span><br><span class="line">		System.out.println(<span class="string">"堆排序后："</span> + Arrays.toString(a));</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">排序前：[<span class="number">5</span>, <span class="number">23</span>, <span class="number">7</span>, <span class="number">33</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">16</span>, <span class="number">9</span>]</span><br><span class="line">堆排序后：[<span class="number">33</span>, <span class="number">23</span>, <span class="number">16</span>, <span class="number">9</span>, <span class="number">7</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">1</span>]</span><br></pre></td></tr></table></figure><br><br></details>
+
+<ul>
+<li><strong>优先队列</strong></li>
+</ul>
+<p>堆可以用来实现优先队列（Priority Queue）。说到队列，大家立刻会想到先进先出。根据名字来看，优先队列似乎不一样。没错，它根据元素的优先级来决定取出顺序。关于优先队列这里不过多讲述。</p>
+<ul>
+<li><strong>海量数据中找TopK</strong></li>
+</ul>
+<p>例如给了一百万个数据，我想找到最大的100个数据。那么我可以先拿100个元素建一个小根堆，然后一个一个取剩下的元素与堆顶比较，如果大于堆顶，则把堆顶删除，再把这个元素放入堆中。如果小于堆顶，则不做处理。最后堆中100个元素则为最大的100元素。</p>
+<h2 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h2><p>以上则为作者对堆的一些认识与总结，希望能给读者一些启发。如有不妥之处，希望能得到批评指正！</p>
+<p>结尾与君共同赏古诗一首，愿君更上一层楼！</p>
+<pre><code>      登鹳雀楼  
+    [唐] 王之涣  
+白日依山尽，黄河入海流。  
+欲穷千里目，更上一层楼。  
+</code></pre><h2 id="七、参考文献"><a href="#七、参考文献" class="headerlink" title="七、参考文献"></a>七、参考文献</h2><p>《数据结构》 严蔚敏 吴伟民 编著<br>《算法导论》 殷建平 徐云 等译<br>《算法》 谢路云 译  </p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Data-Structure/" rel="tag"># Data Structure</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/18/在Dell-Precision5530上安装Arch/" rel="next" title="在Dell Precision5530上安装Arch">
+                <i class="fa fa-chevron-left"></i> 在Dell Precision5530上安装Arch
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://avatars2.githubusercontent.com/u/26017377?s=460&v=4"
+                alt="Leon Chi" />
+            
+              <p class="site-author-name" itemprop="name">Leon Chi</p>
+              <p class="site-description motion-element" itemprop="description">Live well, love lots, and laugh often.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/ChiZelin" target="_blank" title="GitHub"><i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="chizelin@qq.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://caixiangyue.github.io" title="CaiXiangyue" target="_blank">CaiXiangyue</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、定义"><span class="nav-number">1.</span> <span class="nav-text">一、定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、性质"><span class="nav-number">2.</span> <span class="nav-text">二、性质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、操作"><span class="nav-number">3.</span> <span class="nav-text">三、操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、完整代码"><span class="nav-number">4.</span> <span class="nav-text">四、完整代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、使用场景"><span class="nav-number">5.</span> <span class="nav-text">五、使用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、总结"><span class="nav-number">6.</span> <span class="nav-text">六、总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#七、参考文献"><span class="nav-number">7.</span> <span class="nav-text">七、参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Leon Chi</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Mist</a> v6.0.6</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.6"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.6"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.6"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.6"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.6"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

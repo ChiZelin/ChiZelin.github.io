@@ -311,6 +311,143 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/26/heap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leon Chi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars2.githubusercontent.com/u/26017377?s=460&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="A ray of sunshine">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/26/heap/" itemprop="url">堆（Heap）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-26T20:20:43+08:00">2019-08-26</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>注意本文说的堆是数据结构中的堆，而不是java内存模型中的堆。</p>
+<h2 id="一、定义"><a href="#一、定义" class="headerlink" title="一、定义"></a>一、定义</h2><p>n个元素的<strong>序列</strong>{k<sub>1</sub>, k<sub>2</sub>, …, k<sub>n</sub>}当且仅当满足以下关系时，称之为<strong>堆</strong>。若堆顶元素最小，则称之为小顶堆或小根堆。若堆顶元素最大，则称之为大顶堆或大根堆。如下图所示。</p>
+<p><img src="https://juejin.im/equation?tex=%5Cbegin%7Bcases%7D%0A%5Ctext%7B%24k_i%24%20%24%5Cleq%24%20%24k_%7B2i%7D%24%7D%5C%5C%5B1ex%5D%0A%5Ctext%7B%24k_i%24%20%24%5Cleq%24%20%24k2_%7Bi%2B1%7D%24%7D%0A%5Cend%7Bcases%7D%0A~~~~~%20%E6%88%96%20~~~~~%0A%5Cbegin%7Bcases%7D%0A%5Ctext%7B%24k_i%24%20%24%5Cgeq%24%20%24k_%7B2i%7D%24%7D%5C%5C%5B1ex%5D%0A%5Ctext%7B%24k_i%24%20%24%5Cgeq%24%20%24k2_%7Bi%2B1%7D%24%7D%0A%5Cend%7Bcases%7D%20%0A~~~~~%0A%5Cleft(i%20%3D%201%2C%202%2C%20...%2C%20%5Clfloor%20%5Cfrac%7Bn%7D%7B2%7D%20%5Crfloor%5Cright" alt="">)</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/8/25/16cc9180043bdfca?w=949&amp;h=413&amp;f=png&amp;s=273033" alt=""></p>
+<h2 id="二、性质"><a href="#二、性质" class="headerlink" title="二、性质"></a>二、性质</h2><p>若以<strong>一维数组</strong>作为堆的<strong>存储结构</strong>，并将该一维数组看成是一个<strong>完全二叉树</strong>，则完全二叉树中所有非终端结点的值均不大于（或不小于）其左、右孩子结点的值。</p>
+<p>堆顶元素（或完全二叉树的根）是堆中最小值（或最大值）。</p>
+<p>最后一个非终端结点是第<img src="https://juejin.im/equation?tex=%5Clfloor%20%5Cfrac%7Bn%7D%7B2%7D%20%5Crfloor" alt="">个元素。</p>
+<h2 id="三、操作"><a href="#三、操作" class="headerlink" title="三、操作"></a>三、操作</h2><ul>
+<li><strong>向上移动</strong></li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/08/26/heap/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/18/在Dell-Precision5530上安装Arch/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -945,7 +1082,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -983,7 +1120,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">3</span>
+                      
+                    
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -1051,7 +1190,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
