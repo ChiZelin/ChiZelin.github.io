@@ -381,12 +381,11 @@
       
         
           <p>注意本文说的堆是数据结构中的堆，而不是java内存模型中的堆。</p>
-<h2 id="一、定义"><a href="#一、定义" class="headerlink" title="一、定义"></a>一、定义</h2><p>n个元素的<strong>序列</strong>{k<sub>1</sub>, k<sub>2</sub>, …, k<sub>n</sub>}当且仅当满足以下关系时，称之为<strong>堆</strong>。若堆顶元素最小，则称之为小顶堆或小根堆。若堆顶元素最大，则称之为大顶堆或大根堆。如下图所示。</p>
-<p><img src="https://juejin.im/equation?tex=%5Cbegin%7Bcases%7D%0A%5Ctext%7B%24k_i%24%20%24%5Cleq%24%20%24k_%7B2i%7D%24%7D%5C%5C%5B1ex%5D%0A%5Ctext%7B%24k_i%24%20%24%5Cleq%24%20%24k2_%7Bi%2B1%7D%24%7D%0A%5Cend%7Bcases%7D%0A~~~~~%20%E6%88%96%20~~~~~%0A%5Cbegin%7Bcases%7D%0A%5Ctext%7B%24k_i%24%20%24%5Cgeq%24%20%24k_%7B2i%7D%24%7D%5C%5C%5B1ex%5D%0A%5Ctext%7B%24k_i%24%20%24%5Cgeq%24%20%24k2_%7Bi%2B1%7D%24%7D%0A%5Cend%7Bcases%7D%20%0A~~~~~%0A%5Cleft(i%20%3D%201%2C%202%2C%20...%2C%20%5Clfloor%20%5Cfrac%7Bn%7D%7B2%7D%20%5Crfloor%5Cright" alt="">)</p>
+<h2 id="一、定义"><a href="#一、定义" class="headerlink" title="一、定义"></a>一、定义</h2><p>n个元素的<strong>序列</strong>{k<sub>1</sub>, k<sub>2</sub>, …, k<sub>n</sub>}当且仅当满足k<sub>i</sub>&lt;=k<sub>2i</sub>, k<sub>i</sub>&lt;=k<sub>2i+1</sub>或k<sub>i</sub>&gt;=k<sub>2i</sub>, k<sub>i</sub>&gt;=k<sub>2i+1</sub>(i=1,2,3,..,n/2向下取整),关系时，称之为<strong>堆</strong>。若堆顶元素最小，则称之为小顶堆或小根堆。若堆顶元素最大，则称之为大顶堆或大根堆。如下图所示。</p>
 <p><img src="https://user-gold-cdn.xitu.io/2019/8/25/16cc9180043bdfca?w=949&amp;h=413&amp;f=png&amp;s=273033" alt=""></p>
 <h2 id="二、性质"><a href="#二、性质" class="headerlink" title="二、性质"></a>二、性质</h2><p>若以<strong>一维数组</strong>作为堆的<strong>存储结构</strong>，并将该一维数组看成是一个<strong>完全二叉树</strong>，则完全二叉树中所有非终端结点的值均不大于（或不小于）其左、右孩子结点的值。</p>
 <p>堆顶元素（或完全二叉树的根）是堆中最小值（或最大值）。</p>
-<p>最后一个非终端结点是第<img src="https://juejin.im/equation?tex=%5Clfloor%20%5Cfrac%7Bn%7D%7B2%7D%20%5Crfloor" alt="">个元素。</p>
+<p>最后一个非终端结点是第n/2向下取整个元素。</p>
 <h2 id="三、操作"><a href="#三、操作" class="headerlink" title="三、操作"></a>三、操作</h2><ul>
 <li><strong>向上移动</strong></li>
 </ul>
