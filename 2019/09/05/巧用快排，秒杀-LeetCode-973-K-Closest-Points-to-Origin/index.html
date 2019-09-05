@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.6" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.6">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.6">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.6">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.6" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.6',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="细节决定成败。一个小细节可以让代码的性能大幅提升。 最近和朋友一起研究分治算法，看过《算法导论》后觉得，纸上得来终觉浅，绝知此事要躬行啊！遂去 LeetCode 上 Divide and Conquer 这个 Topic 下，做了这道题  973. K Closest Points to Origin。 本文分享作者在做题时发现的优秀代码细节，希望和大家一起吸取营养并体会其中乐趣。 阅读前建议大家">
+<meta name="keywords" content="Data Structure">
+<meta property="og:type" content="article">
+<meta property="og:title" content="巧用快排，秒杀 LeetCode 973. K Closest Points to Origin">
+<meta property="og:url" content="http://yoursite.com/2019/09/05/巧用快排，秒杀-LeetCode-973-K-Closest-Points-to-Origin/index.html">
+<meta property="og:site_name" content="A ray of sunshine">
+<meta property="og:description" content="细节决定成败。一个小细节可以让代码的性能大幅提升。 最近和朋友一起研究分治算法，看过《算法导论》后觉得，纸上得来终觉浅，绝知此事要躬行啊！遂去 LeetCode 上 Divide and Conquer 这个 Topic 下，做了这道题  973. K Closest Points to Origin。 本文分享作者在做题时发现的优秀代码细节，希望和大家一起吸取营养并体会其中乐趣。 阅读前建议大家">
+<meta property="og:updated_time" content="2019-09-05T14:07:49.487Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="巧用快排，秒杀 LeetCode 973. K Closest Points to Origin">
+<meta name="twitter:description" content="细节决定成败。一个小细节可以让代码的性能大幅提升。 最近和朋友一起研究分治算法，看过《算法导论》后觉得，纸上得来终觉浅，绝知此事要躬行啊！遂去 LeetCode 上 Divide and Conquer 这个 Topic 下，做了这道题  973. K Closest Points to Origin。 本文分享作者在做题时发现的优秀代码细节，希望和大家一起吸取营养并体会其中乐趣。 阅读前建议大家">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/09/05/巧用快排，秒杀-LeetCode-973-K-Closest-Points-to-Origin/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>巧用快排，秒杀 LeetCode 973. K Closest Points to Origin | A ray of sunshine</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> 
+
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">A ray of sunshine</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+          
+  <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+</li>
+
+      
+        
+        
+          
+  <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+</li>
+
+      
+        
+        
+          
+  <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+</li>
+
+      
+        
+        
+          
+  <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+</li>
+
+      
+
+      
+    </ul>
+  
+
+  
+    
+
+    
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+    
+
+  
+
+
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/05/巧用快排，秒杀-LeetCode-973-K-Closest-Points-to-Origin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leon Chi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars2.githubusercontent.com/u/26017377?s=460&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="A ray of sunshine">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">巧用快排，秒杀 LeetCode 973. K Closest Points to Origin</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-05T22:02:27+08:00">2019-09-05</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong><em>细节决定成败。一个小细节可以让代码的性能大幅提升。</em></strong></p>
+<p>最近和朋友一起研究分治算法，看过《算法导论》后觉得，纸上得来终觉浅，绝知此事要躬行啊！遂去 LeetCode 上 <a href="https://leetcode.com/tag/divide-and-conquer/" target="_blank" rel="noopener">Divide and Conquer</a> 这个 Topic 下，做了这道题  <a href="https://leetcode.com/problems/k-closest-points-to-origin/" target="_blank" rel="noopener">973. K Closest Points to Origin</a>。</p>
+<p>本文分享作者在做题时发现的优秀代码细节，希望和大家一起吸取营养并体会其中乐趣。</p>
+<p>阅读前建议大家先自己做一下该题，至少思考一下，然后再往下阅读，这样更容易体会到这个细节的优雅。</p>
+<h2 id="一、题目"><a href="#一、题目" class="headerlink" title="一、题目"></a>一、题目</h2><p><strong>973. K Closest Points to Origin</strong></p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">We have a list of points on the plane.  Find the K closest points to the origin (0, 0).</span><br><span class="line"></span><br><span class="line">(Here, the distance between two points on a plane is the Euclidean distance.)</span><br><span class="line"></span><br><span class="line">You may return the answer in any order.  The answer is guaranteed to be unique (except for the order that it is in.)</span><br><span class="line"></span><br><span class="line">Example 1:</span><br><span class="line"></span><br><span class="line">Input: points = [[1,3],[-2,2]], K = 1</span><br><span class="line">Output: [[-2,2]]</span><br><span class="line">Explanation: </span><br><span class="line">The distance between (1, 3) and the origin is sqrt(10).</span><br><span class="line">The distance between (-2, 2) and the origin is sqrt(8).</span><br><span class="line">Since sqrt(8) &lt; sqrt(10), (-2, 2) is closer to the origin.</span><br><span class="line">We only want the closest K = 1 points from the origin, so the answer is just [[-2,2]].</span><br><span class="line"></span><br><span class="line">Example 2:</span><br><span class="line"></span><br><span class="line">Input: points = [[3,3],[5,-1],[-2,4]], K = 2</span><br><span class="line">Output: [[3,3],[-2,4]]</span><br><span class="line">(The answer [[-2,4],[3,3]] would also be accepted.)</span><br><span class="line"> </span><br><span class="line">Note:</span><br><span class="line">1 &lt;= K &lt;= points.length &lt;= 10000</span><br><span class="line">-10000 &lt; points[i][0] &lt; 10000</span><br><span class="line">-10000 &lt; points[i][1] &lt; 10000</span><br></pre></td></tr></table></figure>
+<h2 id="二、代码"><a href="#二、代码" class="headerlink" title="二、代码"></a>二、代码</h2><p>题目大意就是让找出距离原点最近的前K个点。并且<strong>无需关心结果的顺序</strong>。</p>
+<p>闲言少叙，直接上改进前的代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[][] kClosest(<span class="keyword">int</span>[][] points, <span class="keyword">int</span> K) &#123;</span><br><span class="line">        quickSort(points, <span class="number">0</span>, points.length - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> Arrays.copyOfRange(points, <span class="number">0</span>, K);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="keyword">int</span>[][] a, <span class="keyword">int</span> low, <span class="keyword">int</span> high)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(low &lt; high) &#123;</span><br><span class="line">            <span class="keyword">int</span> pivot = partation(a, low, high);</span><br><span class="line">            quickSort(a, low, pivot - <span class="number">1</span>);</span><br><span class="line">            quickSort(a, pivot + <span class="number">1</span>, high);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">partation</span><span class="params">(<span class="keyword">int</span>[][] a, <span class="keyword">int</span> low, <span class="keyword">int</span> high)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] pivot = a[low];</span><br><span class="line">        <span class="keyword">int</span> pivotDist = dist(pivot);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(low &lt; high) &#123;</span><br><span class="line">            <span class="keyword">while</span>(low &lt; high &amp;&amp; dist(a[high]) &gt;= pivotDist) &#123;</span><br><span class="line">                high--;</span><br><span class="line">            &#125;</span><br><span class="line">            a[low] = a[high];</span><br><span class="line">            <span class="keyword">while</span>(low &lt; high &amp;&amp; dist(a[low]) &lt;= pivotDist) &#123;</span><br><span class="line">                low++;</span><br><span class="line">            &#125;</span><br><span class="line">            a[high] = a[low];</span><br><span class="line">        &#125;</span><br><span class="line">        a[low] = pivot;</span><br><span class="line">        <span class="keyword">return</span> low;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">dist</span><span class="params">(<span class="keyword">int</span>[] a)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a[<span class="number">0</span>] * a[<span class="number">0</span>] + a[<span class="number">1</span>] * a[<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用时16ms, 反复试了几次也都是10+ms，看到 LeetCode 记录用时最短的方案是 3ms，把这个3ms的方案提交一下，现在用时4ms，大概看了一下，他也是用快速排序，和我的代码几乎一样，但是我的为什么这么慢？</p>
+<h2 id="三、找差距，变优秀"><a href="#三、找差距，变优秀" class="headerlink" title="三、找差距，变优秀"></a>三、找差距，变优秀</h2><p>差距主要在 quickSort 方法，他的写法类似下面，加了一些判断，去掉了一些不必要的排序，因为题目说 “You may return the answer in any order”, 所以只需找到前K个最小的即可，无需保证前K个按照从小到大的顺序。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="keyword">int</span>[][] a, <span class="keyword">int</span> low, <span class="keyword">int</span> high, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(low &lt; high) &#123;</span><br><span class="line">        <span class="keyword">int</span> pivot = partation(a, low, high);</span><br><span class="line">        <span class="keyword">if</span>(pivot == K) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">if</span>(pivot &gt; K) &#123;</span><br><span class="line">            quickSort(a, low, pivot - <span class="number">1</span>, K);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            quickSort(a, pivot + <span class="number">1</span>, high, K);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>改成这样后用时也是4ms. 我对这段代码的理解：<br>经过一趟快排后，枢轴（支点）的左侧都小于等于它，右侧都大于等于它。<br>（1）如果枢轴的下标等于K, 则说明枢轴左侧的K个点即是前K个距原点距离最小的点，返回即可；<br>（2）如果枢轴的下标大于K, 则要想满足（1），只需将 low 至 pivot - 1 继续进行快速排序；<br>（3）如果枢轴的下标小于K, 则要想满足（1），只需将 pivot + 1 至 high 继续进行快速排序。</p>
+<p>由此可见思路上的差异，我之前的思路是利用快速排序进行从小到大排序，然后取前K个，而这种做法是找恰当的枢轴，枢轴左侧的点即是要找的点，省去很多无用功，将快速排序用的恰到好处。</p>
+<h2 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h2><p>解决问题时，要注意题目中的条件，巧用适当的算法。找到与优秀的差距，变成优秀。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Data-Structure/" rel="tag"># Data Structure</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/26/heap/" rel="next" title="堆（Heap）">
+                <i class="fa fa-chevron-left"></i> 堆（Heap）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://avatars2.githubusercontent.com/u/26017377?s=460&v=4"
+                alt="Leon Chi" />
+            
+              <p class="site-author-name" itemprop="name">Leon Chi</p>
+              <p class="site-description motion-element" itemprop="description">Live well, love lots, and laugh often.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/ChiZelin" target="_blank" title="GitHub"><i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="chizelin@qq.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://caixiangyue.github.io" title="CaiXiangyue" target="_blank">CaiXiangyue</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、题目"><span class="nav-number">1.</span> <span class="nav-text">一、题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、代码"><span class="nav-number">2.</span> <span class="nav-text">二、代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、找差距，变优秀"><span class="nav-number">3.</span> <span class="nav-text">三、找差距，变优秀</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、总结"><span class="nav-number">4.</span> <span class="nav-text">四、总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Leon Chi</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Mist</a> v6.0.6</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.6"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.6"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.6"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.6"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.6"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
